@@ -39,9 +39,21 @@ namespace ApiAlunos
             // Configuração do Swagger
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ApiAlunos API", Version = "v1", Description=" Essa api foi desenvolvida com o objetivo de resolver o desafio de full-stack da Dexian Brasil" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ApiAlunos API", Version = "v1", Description = " Essa api foi desenvolvida com o objetivo de resolver o desafio de full-stack da Dexian Brasil" });
+            });
+
+            // Configuração do CORS
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
             });
         }
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -55,12 +67,15 @@ namespace ApiAlunos
 
             app.UseAuthorization();
 
+            // Configuração do CORS
+            app.UseCors();
+
             // Configuração do Swagger
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "ApiAlunos API V1");
-                c.RoutePrefix = "api/docs"; 
+                c.RoutePrefix = "api/docs";
             });
 
             app.UseEndpoints(endpoints =>
