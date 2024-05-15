@@ -3,17 +3,69 @@
   <div class="content">
 
     <h2>Listagem de Escolas</h2>
+
+    <p-dialog header="{{ modoEdicao ? 'Edição de Escola' : 'Cadastro de Escola' }}" [(visible)]="displayModal"
+      [responsive]="true">
+      <ng-container *ngIf="modoEdicao; else modoCriacao">
+        <form #formEscola="ngForm" (ngSubmit)="salvarEscola(formEscola)">
+          <div class="p-fluid">
+            <div class="p-field">
+              <label for="sDescricao">Nome:</label>
+              <input type="text" id="sDescricao" name="sDescricao" [(ngModel)]="escola.sDescricao" class="p-inputtext"
+                required>
+            </div>
+            <input type="hidden" id="iCodEscola" name="iCodEscola" [(ngModel)]="escola.iCodEscola" class="p-inputtext"
+              required>
+          </div>
+          <div style="margin-top: 2rem;">
+            <button pButton type="button" class="p-button-outlined p-button-secondary" style="margin-right: 0.5rem;"
+              (click)="cancelar()">Cancelar</button>
+            <button pButton type="submit" class="p-button-outlined p-button-warning">Editar</button>
+          </div>
+        </form>
+      </ng-container>
+      <ng-template #modoCriacao>
+        <form #formEscola="ngForm" (ngSubmit)="salvarEscola(formEscola)">
+
+          <div class="p-fluid">
+
+            <div class="p-field">
+              <label for="nome">Nome:</label>
+              <input type="text" id="sDescricao" name="sDescricao" [(ngModel)]="escola.sDescricao" class="p-inputtext"
+                required>
+              <input type="hidden" id="iCodEscola" name="iCodEscola" [(ngModel)]="escola.iCodEscola" class="p-inputtext"
+                required>
+
+            </div>
+          </div>
+          <div style="margin-top: 2rem;">
+            <button pButton type="button" class="p-button-outlined p-button-secondary" style="margin-right: 0.5rem;"
+              (click)="cancelar()">Cancelar</button>
+            <button pButton type="submit" class="p-button-outlined p-button-success">Salvar</button>
+          </div>
+        </form>
+      </ng-template>
+    </p-dialog>
+
+
+    <p-confirmDialog [breakpoints]="{'960px': '45vw', '640px': '100vw'}" [acceptButtonStyleClass]="'p-button-success'"
+      [rejectButtonStyleClass]="'p-button-danger'" [style]="{width: 'max-content'}" [acceptLabel]="'Sim'"
+      [rejectLabel]="'Não'">
+    </p-confirmDialog>
+
     <div class="p-inputgroup">
-      <input pInputText type="text" placeholder="Pesquisar por nome" [(ngModel)]="searchQuery">
+      <input pInputText type="text" placeholder="Pesquisar por nome" [(ngModel)]="searchQuery" (blur)="onBlur()">
       <button pButton type="button" icon="pi pi-search" (click)="search()"></button>
     </div>
 
-    <!-- Botão para adicionar novo aluno -->
+  
     <button pButton type="button" label="Nova Escola" id="btn-novo-aluno" icon="pi pi-plus"
       class="p-button-success btn-novo-aluno" (click)="novaEscola()"></button>
     <!-- Tabela de listagem de escolas -->
-    <p-table [value]="escolasFiltrados" [paginator]="true" [rows]="5" [showCurrentPageReport]="true" [tableStyle]="{'min-width': '50rem'}"
-    currentPageReportTemplate="Mostrando {first} de {last} de {totalRecords} registros" [rowsPerPageOptions]="[5,10,15,20,30,50]">
+    <p-table [value]="escolasFiltradas" [paginator]="true" [rows]="5" [showCurrentPageReport]="true"
+      [tableStyle]="{'min-width': '50rem'}"
+      currentPageReportTemplate="Mostrando {first} de {last} de {totalRecords} registros"
+      [rowsPerPageOptions]="[5,10,15,20,30,50]">
       <!-- Cabeçalho da tabela -->
       <ng-template pTemplate="header">
         <tr>

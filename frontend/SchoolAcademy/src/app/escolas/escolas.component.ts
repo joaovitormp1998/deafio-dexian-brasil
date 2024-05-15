@@ -15,11 +15,11 @@ import { EscolasService } from './services/escolas.service';
 })
 export class EscolasComponent implements OnInit {
   escola: Escola;
-  escolas: Escola[] = []; 
-  selectedEscola: Escola; 
+  escolas: Escola[] = [];
+  selectedEscola: Escola;
   items: MenuItem[] = [];
-  escolasFiltrados: Escola[] = []; 
-  searchQuery: string = ''; 
+  escolasFiltradas: Escola[] = [];
+  searchQuery: string = '';
   displayModal: boolean = false;
   displayConfirmation: boolean = false;
   modoEdicao: boolean = false;
@@ -49,21 +49,44 @@ export class EscolasComponent implements OnInit {
     this.carregarEscolasDaAPI();
 
   }
-  formatarAluno(alunoData: any): Escola {
+  formatarEscola(escolaData: any): Escola {
     return {
-      iCodEscola: alunoData.iCodEscola,
-      sDescricao:alunoData.sDescricao
+      iCodEscola: escolaData.iCodEscola || 0,
+      sDescricao: escolaData.sDescricao
     };
   }
-  salvarAluno(formAluno: any) {
-    const alunoData = this.formatarAluno(formAluno.form.value);
-    // console.log(alunoData);
+  salvarEscola(formEscola: any) {
+    const escolaData = this.formatarEscola(formEscola.form.value);
     if (this.modoEdicao) {
-      // Lógica para atualizar escola
+      this.escolasService.atualizarEscola(escolaData).subscribe(
+        () => {
+          this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Escola atualizada com sucesso' });
+          this.displayModal = false;
+          this.carregarEscolasDaAPI();
+        },
+        error => {
+          console.error('Erro ao atualizar escola:', error);
+          this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao atualizar escola' });
+        }
+      );
+
     } else {
-      
+      this.escolasService.criarEscola(escolaData).subscribe(
+        novaEscola => {
+          // Adicionar nova escola à lista local
+          this.escolas.push(novaEscola);
+          this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Escola criada com sucesso' });
+          this.carregarEscolasDaAPI();
+          this.displayModal = false;
+        },
+        error => {
+          console.error('Erro ao criar nova escola:', error);
+          this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao criar nova escola' });
+        }
+      );
+    }
   }
-}
+
 
 
   confirm(escola: Escola) {
@@ -72,10 +95,15 @@ export class EscolasComponent implements OnInit {
       header: 'Excluir ' + escola.sDescricao,
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'Escola excluido com sucesso' });
+        this.messageService.add({ severity: 'success', summary: 'Confirmed', detail: 'Escola excluida com sucesso' });
 
-   
-        this.carregarEscolasDaAPI();
+        this.escolasService.excluirEscola(escola.iCodEscola)
+        .then(() => {
+          this.carregarEscolasDaAPI();
+        })
+        .catch(error => {
+          console.error('Erro ao excluir aluno:', error);
+        });
 
       },
       reject: (type: any) => {
@@ -89,38 +117,61 @@ export class EscolasComponent implements OnInit {
         }
       }
     });
-  }  // Método para carregar escolas da API
-
-  // Método para carregar escolas da API
+  }
   carregarEscolasDaAPI() {
-    console.log('Funcao foi chamada sim');
     this.escolasService.getEscolasFromAPI().subscribe(
-      escolas => { // Corrigido aqui
-        this.escolas = escolas; // Corrigido aqui
-        this.escolasFiltrados = [...this.escolas]; // Inicializa a lista filtrada
+      escolas => {
+        this.escolas = escolas;
+        this.escolasFiltradas = [...this.escolas];
       },
       error => {
-        console.log('Erro ao carregar escolas:', error);
+        // console.log('Erro ao carregar escolas:', error);
       }
     );
   }
-  
-  // Método para pesquisar escolas
+
   search() {
-   
+    if (this.searchQuery) {
+      const searchValue = this.searchQuery;
+      this.escolasFiltradas = this.escolas.filter(escola => {
+        const nomeMatch = escola.sDescricao.toLowerCase().includes(this.searchQuery.toLowerCase());
+        return nomeMatch;
+      });
+    } else {
+      this.escolasFiltradas = [...this.escolas];
+    }
   }
+
+  limpar() {
+    this.escola = {} as Escola
+
+  }
+  cancelar() {
+    this.displayModal = false;
+    this.modoEdicao = false;
+    this.limpar();
+  }
+
+
   novaEscola() {
     this.displayModal = true;
+    this.modoEdicao = false;
+    this.limpar();
+
   }
   // Método para editar um escola
   editarEscola(escola: Escola) {
-    // Implemente a lógica para editar o escola aqui
-    console.log('Editar escola:', escola);
+    this.escola = { ...escola };
+    this.displayModal = true;
+    this.modoEdicao = true;
   }
+
 
   excluirEscola(escola: Escola) {
     // Exibe a caixa de diálogo de confirmação antes de excluir o escola
     this.confirm(escola);
   }
-
+  onBlur() {
+    this.search();
+  }
 }

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable, catchError, map, tap } from 'rxjs';
-import { Aluno } from '../../alunos/alunos.model';
 import { Escola } from '../../alunos/escolas.model';
 
 @Injectable({
@@ -11,39 +10,34 @@ export class EscolasService {
 
   constructor(private http: HttpClient) { }
 
-  // Método para recuperar os alunos da API
-  getAlunosFromAPI(): Observable<Aluno[]> {
-    return this.http.get<Aluno[]>('https://localhost:7209/api/Alunos');
-  }
-
-  excluirAluno(id: number): Promise<boolean> {
-    return this.http.delete<HttpResponse<any>>(`https://localhost:7209/api/Alunos/${id}`)
+  
+  excluirEscola(id: number): Promise<boolean> {
+    return this.http.delete<HttpResponse<any>>(`https://localhost:7209/api/Escolas/${id}`)
       .toPromise()
       .then(response => {
-        console.log(response);
         if (response?.status === 200) {
-          return true; // Aluno excluído com sucesso
+          return true; 
         } else {
-          return Promise.reject(new Error('Falha ao excluir aluno'));
+          return true; 
         }
       })
       .catch(error => {
-        console.error('Erro ao excluir aluno:', error);
+        console.error('Erro ao excluir escola:', error);
         return Promise.reject(error);
       });
   }
   
   
-  // Método para criar um novo aluno
-  criarAluno(aluno: Aluno): Observable<Aluno> {
+  // Método para criar um novo escola
+  criarEscola(escola: Escola): Observable<Escola> {
 
     // return
-    return this.http.post<Aluno>('https://localhost:7209/api/Alunos', aluno);
+    return this.http.post<Escola>('https://localhost:7209/api/Escolas', escola);
   }
 
-  // Método para atualizar um aluno existente
-  atualizarAluno(aluno: Aluno): Observable<Aluno> {
-    return this.http.put<Aluno>(`https://localhost:7209/api/Alunos/${aluno.iCodAluno}`, aluno);
+  // Método para atualizar um escola existente
+  atualizarEscola(escola: Escola): Observable<Escola> {
+    return this.http.put<Escola>(`https://localhost:7209/api/Escolas/${escola.iCodEscola}`, escola);
   }
   // Método para recuperar as escolas da API
   getEscolasFromAPI(): Observable<Escola[]> {
