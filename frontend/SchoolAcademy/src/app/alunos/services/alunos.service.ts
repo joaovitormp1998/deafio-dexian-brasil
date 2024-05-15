@@ -20,7 +20,6 @@ export class AlunosService {
     return this.http.delete<HttpResponse<any>>(`https://localhost:7209/api/Alunos/${id}`)
       .toPromise()
       .then(response => {
-        console.log(response);
         if (response?.status === 200) {
           return true; // Aluno excluído com sucesso
         } else {

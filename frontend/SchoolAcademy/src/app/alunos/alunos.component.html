@@ -12,27 +12,27 @@
         <form #formAluno="ngForm" (ngSubmit)="salvarAluno(formAluno)">
           <div class="p-fluid">
             <div class="p-field">
-              <label for="nome">Nome:</label>
-              <input type="text" id="nome" name="nome" [(ngModel)]="aluno.sNome" class="p-inputtext" required>
+              <label for="nomeEdit">Nome:</label>
+              <input type="text" id="nomeEdit" name="nomeEdit" [(ngModel)]="aluno.sNome" class="p-inputtext" required>
             </div>
             <div class="p-field">
-              <label for="dataNascimento">Data de Nascimento:</label>
-              <input type="date" id="dataNascimento" name="dataNascimento" [(ngModel)]="aluno.dNascimento"
+              <label for="dataNascimentoEdit">Data de Nascimento:</label>
+              <input type="date" id="dataNascimentoEdit"  [(ngModel)]="aluno.dNascimento" name="dataNascimentoEdit"
                 class="p-inputtext" required>
             </div>
             <div class="p-field">
               <label for="cpf">CPF:</label>
-              <p-inputMask [(ngModel)]="aluno.sCPF" mask="999.999.999-99"></p-inputMask>
+              <p-inputMask [(ngModel)]="aluno.sCPF" mask="999.999.999-99" name="cpfEdit" ></p-inputMask>
 
             </div>
             <div class="p-field">
               <label for="endereco">Endereço:</label>
-              <input type="text" id="endereco" name="endereco" [(ngModel)]="aluno.sEndereco" class="p-inputtext"
+              <input type="text" id="endereco" name="enderecoEdit" [(ngModel)]="aluno.sEndereco" class="p-inputtext" 
                 required>
             </div>
             <div class="p-field">
               <label for="celular">Celular:</label>
-              <p-inputMask [(ngModel)]="aluno.sCelular" mask="(99) 99999-9999"></p-inputMask>
+              <p-inputMask [(ngModel)]="aluno.sCelular" mask="(99) 99999-9999" name="celularEdit"></p-inputMask>
 
             </div>
             <!-- Adicione outros campos conforme necessário -->
@@ -81,6 +81,8 @@
             </div>
             <!-- Adicione outros campos conforme necessário -->
           </div>
+          <input type="hidden" id="iCodAluno" name="iCodAluno" [(ngModel)]="aluno.iCodAluno" class="p-inputtext"
+          required>
           <div style="margin-top: 2rem;">
             <button pButton type="button" class="p-button-outlined p-button-secondary" style="margin-right: 0.5rem;" (click)="cancelar()">Cancelar</button>
             <button pButton type="submit" class="p-button-outlined p-button-success">Salvar</button>
@@ -99,7 +101,7 @@
 
     <!-- Barra de pesquisa -->
     <div class="p-inputgroup">
-      <input pInputText type="text" placeholder="Pesquisar por nome ou CPF" [(ngModel)]="searchQuery" (blur)="onBlur()">
+      <input pInputText type="text" placeholder="Pesquisar por nome ou CPF" [(ngModel)]="searchQuery" (blur)="onBlur()" name="buscar">
       <button pButton type="button" icon="pi pi-search" (click)="search()"></button>
     </div>
 

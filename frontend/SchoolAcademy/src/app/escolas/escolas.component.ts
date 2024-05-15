@@ -125,7 +125,6 @@ export class EscolasComponent implements OnInit {
         this.escolasFiltradas = [...this.escolas];
       },
       error => {
-        // console.log('Erro ao carregar escolas:', error);
       }
     );
   }
@@ -168,7 +167,6 @@ export class EscolasComponent implements OnInit {
 
 
   excluirEscola(escola: Escola) {
-    // Exibe a caixa de diálogo de confirmação antes de excluir o escola
     this.confirm(escola);
   }
   onBlur() {

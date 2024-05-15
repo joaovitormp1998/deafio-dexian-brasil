@@ -4,7 +4,8 @@ import { Aluno } from './alunos.model';
 import { MenuItem } from 'primeng/api';
 import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
 import { Escola } from './escolas.model';
-import { window } from 'rxjs';
+import * as moment from 'moment';
+
 
 @Component({
   selector: 'app-alunos',
@@ -19,19 +20,19 @@ export class AlunosComponent implements OnInit {
   aluno: Aluno;
   currentPage: number = 1;
   rowsPerPage: number = 10;
-
-  escolas: Escola[] = []; // Lista de escolas
-  selectedEscola: Escola; // Escola selecionada
+  alunoId:number=0;
+  escolas: Escola[] = []; 
+  selectedEscola: Escola; 
   items: MenuItem[] = [];
-  alunosFiltrados: Aluno[] = []; // Lista de alunos após filtragem
-  searchQuery: string = ''; // String de pesquisa
-  displayModal: boolean = false; // Variável para controlar a exibição do modal de criação / edição
-  displayConfirmation: boolean = false; // Variável para controlar a exibição do modal de criação / edição
-  modoEdicao: boolean = false; // Variável para controlar o modo de edição
+  alunosFiltrados: Aluno[] = [];
+  searchQuery: string = '';
+  displayModal: boolean = false;
+  displayConfirmation: boolean = false;
+  modoEdicao: boolean = false; 
   constructor(private alunosService: AlunosService, private confirmationService: ConfirmationService, private messageService: MessageService) {
-    this.aluno = {} as Aluno; // Inicializando a propriedade aluno no construtor
-    this.selectedEscola = {} as Escola; // Inicializando a propriedade aluno no construtor
-    this.items = [
+    this.aluno = {} as Aluno;
+    this.selectedEscola = {} as Escola;
+        this.items = [
       {
         label: 'Alunos',
         routerLink: '/alunos'
@@ -53,25 +54,51 @@ export class AlunosComponent implements OnInit {
 
   }
   formatarAluno(alunoData: any): Aluno {
-    return {
-      iCodAluno: 0, // Ou deixe undefined se o serviço atribuir o ID
-      sNome: alunoData.nome,
-      dNascimento: alunoData.dataNascimento,
-      sCPF: alunoData.cpf,
-      sEndereco: alunoData.endereco,
-      sCelular: alunoData.celular,
-      iCodEscola: alunoData.iCodEscola // Ou deixe undefined se a escola for atribuída posteriormente
-    };
-  }
-  salvarAluno(formAluno: any) {
-    const alunoData = this.formatarAluno(formAluno.form.value);
-    // console.log(alunoData);
     if (this.modoEdicao) {
-      // Lógica para atualizar aluno
+        return {
+            iCodAluno:this.alunoId,
+            sNome: alunoData.nomeEdit,
+            dNascimento: alunoData.dataNascimentoEdit,
+            sCPF: alunoData.cpfEdit,
+            sEndereco: alunoData.enderecoEdit,
+            sCelular: alunoData.celularEdit,
+            iCodEscola: alunoData.iCodEscolaEdit 
+        };
+    } else {
+        
+        return {
+          iCodAluno: 0, 
+          sNome: alunoData.nome,
+          dNascimento: alunoData.dataNascimento,
+          sCPF: alunoData.cpf,
+          sEndereco: alunoData.endereco,
+          sCelular: alunoData.celular,
+          iCodEscola: alunoData.iCodEscola 
+        };
+    }
+}
+
+  salvarAluno(formAluno: any) {
+    console.log(formAluno);
+    const alunoData = this.formatarAluno(formAluno.form.value);
+    console.log(alunoData);
+    if (this.modoEdicao) {
+
+      this.alunosService.atualizarAluno(alunoData).subscribe(
+        () => {
+          this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Aluno atualizado com sucesso' });
+          this.displayModal = false;
+          this.carregarAlunosDaAPI();
+        },
+        error => {
+          console.error('Erro ao atualizar aluno:', error);
+          this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao atualizar aluno' });
+        }
+      );
+
     } else {
       this.alunosService.criarAluno(alunoData).subscribe(
         novoAluno => {
-          // Adicionar novo aluno à lista local
           this.alunos.push(novoAluno);
           this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Aluno criado com sucesso' });
           this.carregarAlunosDaAPI();
@@ -87,13 +114,11 @@ export class AlunosComponent implements OnInit {
   }
 
 
-  // Método para carregar alunos da API
   carregarAlunosDaAPI() {
-    // alert("FUncao chamada");
     this.alunosService.getAlunosFromAPI().subscribe(
       alunos => {
         this.alunos = alunos;
-        this.alunosFiltrados = [...this.alunos]; // Inicializa a lista filtrada
+        this.alunosFiltrados = [...this.alunos]; 
       },
       error => {
         console.log('Erro ao carregar alunos:', error);
@@ -112,11 +137,13 @@ export class AlunosComponent implements OnInit {
         this.alunosService.excluirAluno(aluno.iCodAluno)
           .then(() => {
             console.log('Aluno excluído com sucesso!');
+            this.carregarAlunosDaAPI();
+
           })
           .catch(error => {
             console.error('Erro ao excluir aluno:', error);
           });
-        this.carregarAlunosDaAPI();
+          this.carregarAlunosDaAPI();
 
       },
       reject: (type: any) => {
@@ -132,7 +159,6 @@ export class AlunosComponent implements OnInit {
     });
 
   }
-  // Método para carregar escolas da API
   carregarEscolasDaAPI() {
     this.alunosService.getEscolasFromAPI().subscribe(
       escolas => {
@@ -147,7 +173,7 @@ export class AlunosComponent implements OnInit {
     if (this.searchQuery) {
       const searchValue = this.searchQuery;
 
-      const cpfFormatado = searchValue.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4'); // Formatar o CPF
+      const cpfFormatado = searchValue.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4'); 
 
       this.alunosFiltrados = this.alunos.filter(aluno => {
         // Verificar se o nome ou o CPF correspondem à consulta
@@ -178,11 +204,12 @@ export class AlunosComponent implements OnInit {
 
   }
   editarAluno(aluno: Aluno) {
-    this.aluno = { ...aluno }; // Copiar os detalhes do aluno selecionado para o formulário
-    // this.selectedEscola = this.escolas!.find(escola => escola.iCodEscola === aluno.iCodEscola); // Selecionar a escola correspondente ao aluno
+    this.aluno = { ...aluno };
+    this.alunoId = aluno.iCodAluno;
     this.displayModal = true;
     this.modoEdicao = true;
-  }
+}
+
   
   excluirAluno(aluno: Aluno) {
     this.confirm(aluno);
