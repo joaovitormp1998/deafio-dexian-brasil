@@ -5,6 +5,7 @@ Esta é uma API simples para gerenciar informações de alunos.
 ## Execução
 
 ### Pré-requisitos
+Está aplicação foi construida utilizando o .NET 6.0
 
 Certifique-se de ter o .NET SDK instalado em sua máquina. Você pode baixá-lo em: [https://dotnet.microsoft.com/download](https://dotnet.microsoft.com/download)
 
