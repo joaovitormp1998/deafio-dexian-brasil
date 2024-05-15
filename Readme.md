@@ -26,3 +26,6 @@ Navegue até a raiz do projeto que clonou :
 
 `ng serve`
 A Aplicação estará disponível em https://localhost:4200.
+
+Testes
+https://youtu.be/ExvMJgSes6A
