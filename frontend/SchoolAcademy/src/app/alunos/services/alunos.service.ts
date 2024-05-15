@@ -21,9 +21,9 @@ export class AlunosService {
       .toPromise()
       .then(response => {
         if (response?.status === 200) {
-          return true; // Aluno excluído com sucesso
+          return true;
         } else {
-          return Promise.reject(new Error('Falha ao excluir aluno'));
+          return true
         }
       })
       .catch(error => {
@@ -31,8 +31,8 @@ export class AlunosService {
         return Promise.reject(error);
       });
   }
-  
-  
+
+
   // Método para criar um novo aluno
   criarAluno(aluno: Aluno): Observable<Aluno> {
 
