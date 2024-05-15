@@ -17,6 +17,9 @@ import { window } from 'rxjs';
 export class AlunosComponent implements OnInit {
   alunos: Aluno[] = [];
   aluno: Aluno;
+  currentPage: number = 1;
+  rowsPerPage: number = 10;
+
   escolas: Escola[] = []; // Lista de escolas
   selectedEscola: Escola; // Escola selecionada
   items: MenuItem[] = [];
@@ -39,7 +42,7 @@ export class AlunosComponent implements OnInit {
       },
       {
         label: 'Sair',
-        routerLink: '/logout'
+        routerLink: '/'
       }
     ];
   }
@@ -142,40 +145,50 @@ export class AlunosComponent implements OnInit {
   }
   search() {
     if (this.searchQuery) {
-        const searchValue = this.searchQuery;
+      const searchValue = this.searchQuery;
 
-        const cpfFormatado = searchValue.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4'); // Formatar o CPF
+      const cpfFormatado = searchValue.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4'); // Formatar o CPF
 
-        this.alunosFiltrados = this.alunos.filter(aluno => {
-            // Verificar se o nome ou o CPF correspondem à consulta
-            const nomeMatch = aluno.sNome.toLowerCase().includes(this.searchQuery.toLowerCase());
-            const cpfMatch = aluno.sCPF.includes(searchValue) || aluno.sCPF.includes(cpfFormatado);
-            
-            return nomeMatch || cpfMatch;
-        });
+      this.alunosFiltrados = this.alunos.filter(aluno => {
+        // Verificar se o nome ou o CPF correspondem à consulta
+        const nomeMatch = aluno.sNome.toLowerCase().includes(this.searchQuery.toLowerCase());
+        const cpfMatch = aluno.sCPF.includes(searchValue) || aluno.sCPF.includes(cpfFormatado);
+
+        return nomeMatch || cpfMatch;
+      });
     } else {
-        this.alunosFiltrados = [...this.alunos]; // Se a pesquisa estiver vazia, mostra todos os alunos
+      this.alunosFiltrados = [...this.alunos]; 
     }
-}
+  }
 
-
-  novoAluno() {
-    this.displayModal = true;
+  cancelar() {
+    this.displayModal = false;
     this.modoEdicao = false;
 
   }
-  // Método para editar um aluno
+
+  limpar(){
+    this.aluno = {} as Aluno
+
+  }
+  novoAluno() {
+    this.displayModal = true;
+    this.modoEdicao = false;
+    this.limpar();
+
+  }
   editarAluno(aluno: Aluno) {
-    // Implemente a lógica para editar o aluno aqui
+    this.aluno = { ...aluno }; // Copiar os detalhes do aluno selecionado para o formulário
+    // this.selectedEscola = this.escolas!.find(escola => escola.iCodEscola === aluno.iCodEscola); // Selecionar a escola correspondente ao aluno
     this.displayModal = true;
     this.modoEdicao = true;
   }
-
+  
   excluirAluno(aluno: Aluno) {
-    // Exibe a caixa de diálogo de confirmação antes de excluir o aluno
     this.confirm(aluno);
   }
-  onBlur(){
+  onBlur() {
     this.search();
   }
+
 }

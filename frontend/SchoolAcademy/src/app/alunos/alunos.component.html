@@ -37,18 +37,11 @@
             </div>
             <!-- Adicione outros campos conforme necessário -->
           </div>
-          <button pButton type="button" class="p-button-warning">Cancelar</button>
-          <button pButton type="submit" class="p-button p-button-primary">Salvar</button>
-          <div class="p-button-group">
-            <!-- Botão de edição -->
-            <button pButton type="button" icon="pi pi-pencil" class="p-button-warning"
-              (click)="editarAluno(aluno)"></button>
-    
-            <!-- Botão de exclusão -->
-            <button pButton type="button" icon="pi pi-trash" class="p-button-danger"
-              (click)="excluirAluno(aluno)"></button>
-          </div>
-    
+          <div style="margin-top: 2rem;">
+
+          <button pButton type="button" class="p-button-outlined p-button-secondary" style="margin-right: 0.5rem;"(click)="cancelar()">Cancelar</button>
+          <button pButton type="submit" class="p-button-outlined p-button-warning">Editar</button>
+        </div>    
         </form>
       </ng-container>
       <ng-template #modoCriacao>
@@ -89,8 +82,8 @@
             <!-- Adicione outros campos conforme necessário -->
           </div>
           <div style="margin-top: 2rem;">
-          <button pButton type="button" class="p-button-outlined p-button-secondary" style="margin-right: 0.5rem;">Cancelar</button>
-          <button pButton type="submit" class="p-button-outlined p-button-success">Salvar</button>
+            <button pButton type="button" class="p-button-outlined p-button-secondary" style="margin-right: 0.5rem;" (click)="cancelar()">Cancelar</button>
+            <button pButton type="submit" class="p-button-outlined p-button-success">Salvar</button>
           </div>
         </form>
       </ng-template>
@@ -115,7 +108,8 @@
       class="p-button-success btn-novo-aluno" (click)="novoAluno()"></button>
 
     <!-- Tabela de listagem de alunos -->
-    <p-table [value]="alunosFiltrados">
+    <p-table [value]="alunosFiltrados" [paginator]="true" [rows]="5" [showCurrentPageReport]="true" [tableStyle]="{'min-width': '50rem'}"
+    currentPageReportTemplate="Mostrando {first} de {last} de {totalRecords} registros" [rowsPerPageOptions]="[5,10,15,20,30,50]">
       <!-- Cabeçalho da tabela -->
       <ng-template pTemplate="header">
         <tr>
@@ -151,7 +145,9 @@
           </td>
         </tr>
       </ng-template>
+
     </p-table>
+    
   </div>
 </div>
 <p-toast></p-toast>

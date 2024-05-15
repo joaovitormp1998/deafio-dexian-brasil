@@ -15,6 +15,7 @@ import { BrowserModule } from "@angular/platform-browser";
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import {CalendarModule} from 'primeng/calendar';
+import { PaginatorModule } from 'primeng/paginator';
 
 import { MessagesModule } from "primeng/messages";
 import { MessageModule } from "primeng/message";
@@ -53,6 +54,8 @@ import { InputMaskModule } from 'primeng/inputmask';
     DialogModule,
     TableModule, 
     InputMaskModule,
+    PaginatorModule,
+
     AppRoutingModule
   ],
   providers: [MessageService],

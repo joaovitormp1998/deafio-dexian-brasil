@@ -40,7 +40,7 @@ export class EscolasComponent implements OnInit {
       },
       {
         label: 'Sair',
-        routerLink: '/logout'
+        routerLink: '/'
       }
     ];
   }

@@ -21,21 +21,33 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    sessionStorage.removeItem('token');
+
+   }
 
   submitForm() {
     if (this.formAuth.valid) {
-      const username = this.formAuth.get('username')?.value;
-      const password = this.formAuth.get('password')?.value;
-      if (username === 'TESTE' && password === '123') {
-        // Aqui você pode realizar a lógica de autenticação
-        this.redirectToMainPage();
-      } else {
-        // Caso haja campos inválidos, você pode tratar de acordo com sua lógica
-        alert('Usuário ou senha inválidos');
-      }
+        const username = this.formAuth.get('username')?.value;
+        const password = this.formAuth.get('password')?.value;
+        if (username === 'TESTE' && password === '123') {
+            // Lógica de autenticação bem-sucedida
+
+            // Criar um token simples (pode ser gerado de forma mais segura em um aplicativo real)
+            const token = 'token_gerado_aqui';
+
+            // Armazenar o token na sessionStorage
+            sessionStorage.setItem('token', token);
+
+            // Redirecionar para a página principal
+            this.redirectToMainPage();
+        } else {
+            // Caso haja campos inválidos, você pode tratar de acordo com sua lógica
+            alert('Usuário ou senha inválidos');
+        }
     }
-  }
+}
+
 
   redirectToMainPage() {
     this.router.navigate(['/alunos']);

@@ -12,7 +12,8 @@
     <button pButton type="button" label="Nova Escola" id="btn-novo-aluno" icon="pi pi-plus"
       class="p-button-success btn-novo-aluno" (click)="novaEscola()"></button>
     <!-- Tabela de listagem de escolas -->
-    <p-table [value]="escolasFiltrados">
+    <p-table [value]="escolasFiltrados" [paginator]="true" [rows]="5" [showCurrentPageReport]="true" [tableStyle]="{'min-width': '50rem'}"
+    currentPageReportTemplate="Mostrando {first} de {last} de {totalRecords} registros" [rowsPerPageOptions]="[5,10,15,20,30,50]">
       <!-- Cabeçalho da tabela -->
       <ng-template pTemplate="header">
         <tr>
