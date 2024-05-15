@@ -1,0 +1,155 @@
+<div class="container">
+
+  <p-menubar [model]="items"></p-menubar>
+
+
+  <div class="content">
+    <h2>Listagem de Alunos</h2>
+    <!-- Modal de criação / edição de aluno -->
+    <p-dialog header="{{ modoEdicao ? 'Edição de Aluno' : 'Cadastro de Aluno' }}" [(visible)]="displayModal" [responsive]="true">
+      <ng-container *ngIf="modoEdicao; else modoCriacao">
+        <!-- Formulário de edição -->
+        <form #formAluno="ngForm" (ngSubmit)="salvarAluno(formAluno)">
+          <div class="p-fluid">
+            <div class="p-field">
+              <label for="nomeEdit">Nome:</label>
+              <input type="text" id="nomeEdit" name="nomeEdit" [(ngModel)]="aluno.sNome" class="p-inputtext" required>
+            </div>
+            <div class="p-field">
+              <label for="dataNascimentoEdit">Data de Nascimento:</label>
+              <input type="date" id="dataNascimentoEdit"  [(ngModel)]="aluno.dNascimento" name="dataNascimentoEdit"
+                class="p-inputtext" required>
+            </div>
+            <div class="p-field">
+              <label for="cpf">CPF:</label>
+              <p-inputMask [(ngModel)]="aluno.sCPF" mask="999.999.999-99" name="cpfEdit" ></p-inputMask>
+
+            </div>
+            <div class="p-field">
+              <label for="endereco">Endereço:</label>
+              <input type="text" id="endereco" name="enderecoEdit" [(ngModel)]="aluno.sEndereco" class="p-inputtext" 
+                required>
+            </div>
+            <div class="p-field">
+              <label for="celular">Celular:</label>
+              <p-inputMask [(ngModel)]="aluno.sCelular" mask="(99) 99999-9999" name="celularEdit"></p-inputMask>
+
+            </div>
+            <!-- Adicione outros campos conforme necessário -->
+          </div>
+          <div style="margin-top: 2rem;">
+
+          <button pButton type="button" class="p-button-outlined p-button-secondary" style="margin-right: 0.5rem;"(click)="cancelar()">Cancelar</button>
+          <button pButton type="submit" class="p-button-outlined p-button-warning">Editar</button>
+        </div>    
+        </form>
+      </ng-container>
+      <ng-template #modoCriacao>
+        <form #formAluno="ngForm" (ngSubmit)="salvarAluno(formAluno)">
+
+          <div class="p-fluid">
+            <div class="p-field">
+              <label for="escola">Escola:</label>
+              <p-dropdown [options]="escolas" [(ngModel)]="aluno.iCodEscola" optionLabel="sDescricao"
+                optionValue="iCodEscola" placeholder="Selecione uma escola" name="escola"></p-dropdown>
+            </div>
+
+            <div class="p-field">
+              <label for="nome">Nome:</label>
+              <input type="text" id="nome" name="nome" [(ngModel)]="aluno.sNome" class="p-inputtext" required>
+            </div>
+            <div class="p-field">
+              <label for="dataNascimento">Data de Nascimento:</label>
+              <input type="date" id="dataNascimento" name="dataNascimento" [(ngModel)]="aluno.dNascimento"
+                class="p-inputtext" required>
+
+            </div>
+            <div class="p-field">
+              <label for="cpf">CPF:</label>
+              <p-inputMask [(ngModel)]="aluno.sCPF" mask="999.999.999-99" name="cpf"></p-inputMask>
+            </div>
+
+            <div class="p-field">
+              <label for="endereco">Endereço:</label>
+              <input type="text" id="endereco" name="endereco" [(ngModel)]="aluno.sEndereco" class="p-inputtext"
+                required>
+            </div>
+            <div class="p-field">
+              <label for="celular">Celular:</label>
+              <p-inputMask [(ngModel)]="aluno.sCelular" mask="(99) 99999-9999" name="celular"></p-inputMask>
+
+            </div>
+            <!-- Adicione outros campos conforme necessário -->
+          </div>
+          <input type="hidden" id="iCodAluno" name="iCodAluno" [(ngModel)]="aluno.iCodAluno" class="p-inputtext"
+          required>
+          <div style="margin-top: 2rem;">
+            <button pButton type="button" class="p-button-outlined p-button-secondary" style="margin-right: 0.5rem;" (click)="cancelar()">Cancelar</button>
+            <button pButton type="submit" class="p-button-outlined p-button-success">Salvar</button>
+          </div>
+        </form>
+      </ng-template>
+    </p-dialog>
+
+
+    <!-- Modal de confirmação de exclusão / deleção / edição -->
+    <p-confirmDialog [breakpoints]="{'960px': '45vw', '640px': '100vw'}" [acceptButtonStyleClass]="'p-button-success'"
+      [rejectButtonStyleClass]="'p-button-danger'" [style]="{width: 'max-content'}" [acceptLabel]="'Sim'"
+      [rejectLabel]="'Não'">
+
+    </p-confirmDialog>
+
+    <!-- Barra de pesquisa -->
+    <div class="p-inputgroup">
+      <input pInputText type="text" placeholder="Pesquisar por nome ou CPF" [(ngModel)]="searchQuery" (blur)="onBlur()" name="buscar">
+      <button pButton type="button" icon="pi pi-search" (click)="search()"></button>
+    </div>
+
+    <!-- Botão para adicionar novo aluno -->
+    <button pButton type="button" label="Novo Aluno" id="btn-novo-aluno" icon="pi pi-plus"
+      class="p-button-success btn-novo-aluno" (click)="novoAluno()"></button>
+
+    <!-- Tabela de listagem de alunos -->
+    <p-table [value]="alunosFiltrados" [paginator]="true" [rows]="5" [showCurrentPageReport]="true" [tableStyle]="{'min-width': '50rem'}"
+    currentPageReportTemplate="Mostrando {first} de {last} de {totalRecords} registros" [rowsPerPageOptions]="[5,10,15,20,30,50]">
+      <!-- Cabeçalho da tabela -->
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Código</th>
+          <th>Nome</th>
+          <th>Data de Nascimento</th>
+          <th>CPF</th>
+          <th>Endereço</th>
+          <th>Celular</th>
+          <th>Ações</th>
+        </tr>
+      </ng-template>
+      <!-- Corpo da tabela -->
+      <ng-template pTemplate="body" let-aluno>
+        <tr>
+          <td>{{ aluno.iCodAluno }}</td>
+          <td>{{ aluno.sNome }}</td>
+          <td>{{ aluno.dNascimento | date }}</td>
+          <td>{{ aluno.sCPF }}</td>
+          <td>{{ aluno.sEndereco }}</td>
+          <td>{{ aluno.sCelular }}</td>
+          <td>
+            <div class="p-button-group">
+              <!-- Botão de edição -->
+              <button pButton type="button" icon="pi pi-pencil" class="p-button-warning" 
+                style="margin-right:0.5rem;"
+                (click)="editarAluno(aluno)"></button>
+      
+              <!-- Botão de exclusão -->
+              <button pButton type="button" icon="pi pi-trash" class="p-button-danger"
+                (click)="excluirAluno(aluno)"></button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+    </p-table>
+    
+  </div>
+</div>
+<p-toast></p-toast>

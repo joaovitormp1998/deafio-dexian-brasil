@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\João Vitor\\Desktop\\Desafio Técnico Dexian\\backend\\ApiAlunos\\ApiAlunos.csproj": {}
+    "C:\\Users\\João Vitor\\Desktop\\Desafio Técnico Dexian\\deafio-dexian-brasil\\backend\\ApiAlunos\\ApiAlunos.csproj": {}
   },
   "projects": {
-    "C:\\Users\\João Vitor\\Desktop\\Desafio Técnico Dexian\\backend\\ApiAlunos\\ApiAlunos.csproj": {
+    "C:\\Users\\João Vitor\\Desktop\\Desafio Técnico Dexian\\deafio-dexian-brasil\\backend\\ApiAlunos\\ApiAlunos.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\João Vitor\\Desktop\\Desafio Técnico Dexian\\backend\\ApiAlunos\\ApiAlunos.csproj",
+        "projectUniqueName": "C:\\Users\\João Vitor\\Desktop\\Desafio Técnico Dexian\\deafio-dexian-brasil\\backend\\ApiAlunos\\ApiAlunos.csproj",
         "projectName": "ApiAlunos",
-        "projectPath": "C:\\Users\\João Vitor\\Desktop\\Desafio Técnico Dexian\\backend\\ApiAlunos\\ApiAlunos.csproj",
+        "projectPath": "C:\\Users\\João Vitor\\Desktop\\Desafio Técnico Dexian\\deafio-dexian-brasil\\backend\\ApiAlunos\\ApiAlunos.csproj",
         "packagesPath": "C:\\Users\\João Vitor\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\João Vitor\\Desktop\\Desafio Técnico Dexian\\backend\\ApiAlunos\\obj\\",
+        "outputPath": "C:\\Users\\João Vitor\\Desktop\\Desafio Técnico Dexian\\deafio-dexian-brasil\\backend\\ApiAlunos\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\João Vitor\\AppData\\Roaming\\NuGet\\NuGet.Config"

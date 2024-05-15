@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "gOKAoaQqKD5vNE7Eg6Mw3VRNyVPdATGVoYEl7RhdawFaT8Qau77h8qDKlPvRxqgxc1gYnaWV/8ej5cIBO1XM7Q==",
+  "dgSpecHash": "ju146Pq42aZUyEbqB7GmTuEU/OHb1Cg0Q6kWl5pevLLYlo4S9CMKC3fu04orKRY+7sVC+On0twC839ipJMzbDA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\João Vitor\\Desktop\\Desafio Técnico Dexian\\backend\\ApiAlunos\\ApiAlunos.csproj",
+  "projectFilePath": "C:\\Users\\João Vitor\\Desktop\\Desafio Técnico Dexian\\deafio-dexian-brasil\\backend\\ApiAlunos\\ApiAlunos.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\João Vitor\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
     "C:\\Users\\João Vitor\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
