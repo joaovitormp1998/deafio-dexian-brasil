@@ -1,3 +1,4 @@
+using ApiAlunos.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -35,6 +36,7 @@ namespace ApiAlunos
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddScoped<EscolaService>();
 
             // Configuração do Swagger
             services.AddSwaggerGen(c =>

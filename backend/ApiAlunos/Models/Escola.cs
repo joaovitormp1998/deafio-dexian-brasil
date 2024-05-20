@@ -7,9 +7,7 @@ namespace ApiAlunos.Models
         
         public Escola()
         {
-            // Inicialização das propriedades
             sDescricao = "";
-
         }
     }
 }

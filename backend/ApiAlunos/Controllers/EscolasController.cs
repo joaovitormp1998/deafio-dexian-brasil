@@ -1,6 +1,7 @@
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using ApiAlunos.Models;
+using System.Collections.Generic;
+using ApiAlunos.Services;
 
 namespace ApiAlunos.Controllers
 {
@@ -8,55 +9,67 @@ namespace ApiAlunos.Controllers
     [ApiController]
     public class EscolasController : ControllerBase
     {
-        private static List<Escola> _escolas = new List<Escola>();
+        private readonly EscolaService _escolaService;
+
+        public EscolasController(EscolaService escolaService)
+        {
+            _escolaService = escolaService;
+        }
 
         [HttpGet]
-        public IActionResult Get()
+        public ActionResult<IEnumerable<Escola>> GetEscolas()
         {
-            return Ok(_escolas);
+            return _escolaService.GetEscolas();
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetById(int id)
+        public ActionResult<Escola> GetEscola(int id)
         {
-            var escola = _escolas.Find(e => e.iCodEscola == id);
+            var escola = _escolaService.GetEscola(id);
             if (escola == null)
             {
                 return NotFound();
             }
-            return Ok(escola);
+            return escola;
         }
 
         [HttpPost]
-        public IActionResult Post(Escola escola)
+        public ActionResult<Escola> PostEscola(Escola escola)
         {
-            escola.iCodEscola = _escolas.Count + 1;
-            _escolas.Add(escola);
-            return CreatedAtAction(nameof(GetById), new { id = escola.iCodEscola }, escola);
+            _escolaService.AddEscola(escola);
+            return CreatedAtAction("GetEscola", new { id = escola.iCodEscola }, escola);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, Escola escola)
+        public IActionResult PutEscola(int id, Escola escola)
         {
-            var index = _escolas.FindIndex(e => e.iCodEscola == id);
-            if (index == -1)
+            if (id != escola.iCodEscola)
+            {
+                return BadRequest();
+            }
+
+            var existingEscola = _escolaService.GetEscola(id);
+            if (existingEscola == null)
             {
                 return NotFound();
             }
-            _escolas[index] = escola;
+
+            _escolaService.UpdateEscola(escola);
             return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public IActionResult DeleteEscola(int id)
         {
-            var index = _escolas.FindIndex(e => e.iCodEscola == id);
-            if (index == -1)
+            var escola = _escolaService.GetEscola(id);
+            if (escola == null)
             {
                 return NotFound();
             }
-            _escolas.RemoveAt(index);
+
+            _escolaService.DeleteEscola(id);
             return NoContent();
         }
+
     }
 }
